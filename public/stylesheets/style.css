@@ -6,3 +6,18 @@ body {
 a {
   color: #00B7FF;
 }
+.form-element
+{
+    float:left;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    font-size: 10pt;
+    color: gray;
+}
+.clear{
+  clear: both;
+}
+input, label, select {
+    display:block;
+    width: 100%;
+}

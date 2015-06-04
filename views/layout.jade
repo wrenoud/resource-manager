@@ -3,5 +3,21 @@ html
   head
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
+    script(src="/javascripts/jquery-1.11.3.js")
+    script(type='text/javascript').
+      var runid = '#{runid}';
+      function checkReload()
+      {
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.open("GET","/reload",false);
+        xmlhttp.send();
+        var res = JSON.parse(xmlhttp.response);
+        if(res.runid != runid) location.reload();
+        setTimeout(checkReload, 2000);
+      }
+      setTimeout(checkReload, 2000);
+
+    block head
+
   body
     block content

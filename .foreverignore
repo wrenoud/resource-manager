@@ -1,3 +1,4 @@
-node_modules/
+.git/
+views/
 database.sqlite
 database.sqlite-journal
