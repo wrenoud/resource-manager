@@ -21,3 +21,7 @@ input, label, select {
     display:block;
     width: 100%;
 }
+
+#properties_controls div {
+  display: inline;
+}

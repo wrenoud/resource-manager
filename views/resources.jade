@@ -13,7 +13,7 @@ block head
           allowRemoveAll: false,
           allowAdd: true,
           allowAddN: false,
-          maxFormsCount: 10,
+          //maxFormsCount: 10,
           minFormsCount: 1,
           iniFormsCount: 1
       });
@@ -24,7 +24,8 @@ block content
   ul
     each val in ResourceDefinitions
       li
-        a(href=val.name)= val.name
+        a(href='/resources/' + val.id)= val.name
+  hr
   h2 Add Resource
   div
     form(method="post")
@@ -36,7 +37,7 @@ block content
           label Short Name
             input(type="text", name="shortname")
         div.clear
-      h2 Properties
+      h3 Properties
       #properties
         #properties_noforms_template
           p No Properties
