@@ -9,10 +9,12 @@ html
       function checkReload()
       {
         var xmlhttp = new XMLHttpRequest();
-        xmlhttp.open("GET","/reload",false);
+        xmlhttp.onload = function(){
+          var res = JSON.parse(this.response);
+          if(res.runid != runid) location.reload();          
+        };
+        xmlhttp.open("GET","/reload",true);
         xmlhttp.send();
-        var res = JSON.parse(xmlhttp.response);
-        if(res.runid != runid) location.reload();
         setTimeout(checkReload, 2000);
       }
       setTimeout(checkReload, 2000);
