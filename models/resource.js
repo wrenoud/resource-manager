@@ -4,6 +4,8 @@ module.exports = function(sequelize, DataTypes) {
     classMethods: {
       associate: function(models) {
         this.belongsTo(models.ResourceDefinition, {foreignKey: 'definition'});
+        
+        this.hasMany(models.Property, {foreignKey: 'resource'});
       }
     }
   })
