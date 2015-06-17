@@ -1,7 +1,8 @@
 module.exports = function(sequelize, DataTypes) {
   var PropertyDefinition = sequelize.define('PropertyDefinition', {
     name: DataTypes.STRING,
-    computed: DataTypes.BOOLEAN 
+    computed: DataTypes.BOOLEAN,
+    equation: DataTypes.TEXT
   }, {
     classMethods: {
       associate: function(models) {

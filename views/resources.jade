@@ -49,9 +49,14 @@ block content
             label Type
               select(id='properties_#index#_name', name='properties[#index#][type]')
                 option
-                option Number
-                option Text
-                option Url
+                each val in PropertyTypes
+                  option(value=val.id)= val.name
+          div.form-element
+            label Computed
+              input(type='checkbox', id='properties_#index#_computed', name='properties[#index#][computed]', value="true")
+          div.form-element
+            label Equation
+              input(type='text', id='properties_#index#_equation', name='properties[#index#][equation]')
           div.clear
         #properties_controls
           #properties_add

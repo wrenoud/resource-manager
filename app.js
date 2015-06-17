@@ -9,10 +9,18 @@ var uuid = require('node-uuid');
 var index = require('./routes/index');
 var resources = require('./routes/resources');
 
+// start app
 var app = express();
 
+// load models
 var models = require('./models');
-models.sequelize.sync({ force: true });
+models.sequelize.sync({ force: true }).then(function(){
+  models.PropertyType.bulkCreate([
+    {'name':'Number','view':'{{this}}'},
+    {'name':'Text','view':'{{this}}'},
+    {'name':'URL','view':'{{this}}'}
+  ]);
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
