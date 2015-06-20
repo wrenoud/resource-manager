@@ -1,23 +1,7 @@
 extends layout
 
 block head
-  script(src='/javascripts/jquery.sheepItPlugin-1.1.1.js')
-  script(type='text/javascript').
-    var local_data = !{(data && data.properties) ? JSON.stringify(data.properties) : "[]"};
 
-    $(document).ready(function() {
-      var properties = $('#properties').sheepIt({
-          separator: '',
-          allowRemoveLast: true,
-          allowRemoveCurrent: true,
-          allowRemoveAll: false,
-          allowAdd: true,
-          allowAddN: false,
-          //maxFormsCount: 10,
-          minFormsCount: 1,
-          iniFormsCount: 1
-      });
-    });
 
 block content
   h1 Resources
@@ -38,30 +22,6 @@ block content
             input(type="text", name="shortname")
         div.clear
       h3 Properties
-      #properties
-        #properties_noforms_template
-          p No Properties
-        #properties_template
-          div.form-element
-            label Name
-              input(type='text', id='properties_#index#_name', name='properties[#index#][name]')
-          div.form-element
-            label Type
-              select(id='properties_#index#_name', name='properties[#index#][type]')
-                option
-                each val in PropertyTypes
-                  option(value=val.id)= val.name
-          div.form-element
-            label Computed
-              input(type='checkbox', id='properties_#index#_computed', name='properties[#index#][computed]', value="true")
-          div.form-element
-            label Equation
-              input(type='text', id='properties_#index#_equation', name='properties[#index#][equation]')
-          div.clear
-        #properties_controls
-          #properties_add
-            button Add Property
-          #properties_remove_last
-            button Remove Last
+      include propertyDefinition_add.jade
       #submit
         input(type="submit")
