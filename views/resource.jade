@@ -5,13 +5,17 @@ block head
 
 block content
   h1= ResourceDefinition.display
-  a(href="./new")
-    | Create New Resource
+    |  
+    a.btn.btn-primary(href="./new")
+      span.glyphicon.glyphicon-plus(aria-hidden="true")
+      |  #{ResourceDefinition.display}
   if Resources.length > 0
-    ul
+    div.list-group
       each val in Resources
-        li
-          a(href='/resources/' + ResourceDefinition.name + '/' + val.id + '/')= val.template
+        a.list-group-item(href='/resources/' + ResourceDefinition.name + '/' + val.id + '/')= val.template
+    a.btn.btn-primary(href="./new")
+      span.glyphicon.glyphicon-plus(aria-hidden="true")
+      |  #{ResourceDefinition.display}
   else
     p
       | *** No Resources found. ***

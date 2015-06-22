@@ -4,14 +4,19 @@ block head
 
 
 block content
-  h1 Resources
-  a(href="./new")
-    | Create New Resource Type
+  h1 Resources 
+    a.btn.btn-primary(href="./new")
+      span.glyphicon.glyphicon-plus(aria-hidden="true")
+      |  Resource
+  div.container
   if ResourceDefinitions.length > 0
-    ul
+    ul.list-group
       each val in ResourceDefinitions
-        li
+        li.list-group-item
           a(href='/resources/' + val.name + "/")= val.display
+    a.btn.btn-primary(href="./new")
+      span.glyphicon.glyphicon-plus(aria-hidden="true")
+      |  Resource
   else
     p
       | *** No Resource Definitions found. ***
