@@ -1,0 +1,17 @@
+extends layout
+
+block head
+
+
+block content
+  h1= ResourceDefinition.display
+  a(href="./new")
+    | Create New Resource
+  if Resources.length > 0
+    ul
+      each val in Resources
+        li
+          a(href='/resources/' + ResourceDefinition.name + '/' + val.id + '/')= val.template
+  else
+    p
+      | *** No Resources found. ***

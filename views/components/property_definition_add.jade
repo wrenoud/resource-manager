@@ -2,6 +2,17 @@ script(src='/javascripts/jquery.sheepItPlugin-1.1.1.js')
 script(type='text/javascript').
   var local_data = !{(data && data.properties) ? JSON.stringify(data.properties) : "[]"};
 
+  var toggleComputed = function(){
+    var index = this.id.split("_")[1];
+    if(this.checked){
+      $('#properties_'+index+'_equation_container').show();
+      $('#properties_'+index+'_default_container').hide();
+    }else{
+      $('#properties_'+index+'_equation_container').hide();
+      $('#properties_'+index+'_default_container').show();
+    }
+  }
+
   $(document).ready(function() {
     var properties = $('#properties').sheepIt({
         separator: '',
@@ -12,8 +23,12 @@ script(type='text/javascript').
         allowAddN: false,
         //maxFormsCount: 10,
         minFormsCount: 1,
-        iniFormsCount: 1
+        iniFormsCount: 1,
+        afterAdd: function(source, newForm) {
+          $(newForm).find("input[type=checkbox]").click(toggleComputed);
+        }
     });
+
   });
 
 #properties
@@ -32,9 +47,12 @@ script(type='text/javascript').
     div.form-element
       label Computed
         input(type='checkbox', id='properties_#index#_computed', name='properties[#index#][computed]', value="true")
-    div.form-element
+    div.form-element.hidden(id='properties_#index#_equation_container' style='display:none')
       label Equation
         input(type='text', id='properties_#index#_equation', name='properties[#index#][equation]')
+    div.form-element(id='properties_#index#_default_container')
+      label Default
+        input(type='text', id='properties_#index#_default', name='properties[#index#][default]')
     div.clear
   #properties_controls
     #properties_add

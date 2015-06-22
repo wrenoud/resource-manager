@@ -2,5 +2,27 @@ extends layout
 
 block head
   
-block body
-  
+
+block content
+  h1 New Resource Definition
+  div
+    form(method="post")
+      #resource
+        div.form-element
+          label Name
+            input(type="text", name="name")
+        div.form-element
+          label Display Name
+            input(type="text", name="display")
+        div.clear
+        div.form-element
+          label Description
+            input(type="text", name="description")
+        div.form-element
+          label View
+            input(type="text", name="view")
+        div.clear
+      h3 Properties
+      include components/property_definition_add.jade
+      #submit
+        input(type="submit")

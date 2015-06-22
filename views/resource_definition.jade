@@ -1,0 +1,18 @@
+extends layout
+
+block head
+
+
+block content
+  h1 Resources
+  a(href="./new")
+    | Create New Resource Type
+  if ResourceDefinitions.length > 0
+    ul
+      each val in ResourceDefinitions
+        li
+          a(href='/resources/' + val.name + "/")= val.display
+  else
+    p
+      | *** No Resource Definitions found. ***
+  

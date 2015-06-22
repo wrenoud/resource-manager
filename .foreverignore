@@ -1,4 +1,7 @@
-.git/
-views/
+.git
+.git/*
+.git/*/*
+.git/*/*/*
+views
 database.sqlite
 database.sqlite-journal

@@ -1,0 +1,14 @@
+extends layout
+
+block head
+
+
+block content
+  h1= ResourceDefinition.display
+  a(href="./edit")
+    | Edit Resource
+  table
+    each property in Resource.properties
+      tr
+        td= property.name
+        td= property.value

@@ -1,7 +1,6 @@
 module.exports = function(sequelize, DataTypes) {
   var Property = sequelize.define('Property', {
-    value: DataTypes.TEXT,
-    default: DataTypes.TEXT
+    value: DataTypes.TEXT
   }, {
     classMethods: {
       associate: function(models) {
