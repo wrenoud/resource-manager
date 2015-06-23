@@ -14,8 +14,13 @@ block content
             label.col-sm-3.control-label= property.name
             div.col-sm-9
               if property.computed
-                input.form-control(type="text", disabled="disabled")
+                input.form-control(type="text", disabled="disabled", value=property.equation)
               else
-                input.form-control(type="text", name=property.name, value=property.default)
+                input.form-control(
+                  type="text",
+                  name=property.name,
+                  value=property.default,
+                  pattern=property.PropertyType.pattern,
+                  title=property.PropertyType.name)
       #submit
         input(type="submit")

@@ -16,6 +16,11 @@ block content
               if PropertyDefinitions[property.definition].computed
                 input.form-control(type="text", disabled="disabled", value=PropertyDefinitions[property.definition].equation)
               else
-                input.form-control(type="text", name=property.name, value=property.value)
+                input.form-control(
+                  type="text",
+                  name=property.name,
+                  value=property.value,
+                  pattern=PropertyDefinitions[property.definition].PropertyType.pattern,
+                  title=PropertyDefinitions[property.definition].PropertyType.name)
       #submit
         input(type="submit")

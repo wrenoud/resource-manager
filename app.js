@@ -14,13 +14,15 @@ var app = express();
 
 // load models
 var models = require('./models');
-models.sequelize.sync({ force: true }).then(function(){
-  models.PropertyType.bulkCreate([
-    {'name':'Number','view':'{{this}}'},
-    {'name':'Text','view':'{{this}}'},
-    {'name':'URL','view':'{{this}}'}
-  ]);
-});
+if(false){
+  models.sequelize.sync({ force: true }).then(function(){
+    models.PropertyType.bulkCreate([
+      {'name':'Number', 'pattern': '[-+]?[0-9]*[.,]?[0-9]+', 'view':'{{value}}'},
+      {'name':'Text',   'pattern': '.*', 'view':'{{value}}'},
+      {'name':'URL',    'pattern': 'https?://([a-zA-Z\d]+\.)+[a-zA-Z\d]{2,6}(/[/\w \.-]*)*', 'view':'<a target="_blank" href="{{value}}">{{value}}</a>'}
+    ]);
+  });  
+}
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

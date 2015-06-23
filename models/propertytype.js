@@ -2,7 +2,8 @@ module.exports = function(sequelize, DataTypes) {
   var PropertyType = sequelize.define('PropertyType', {
     name: DataTypes.STRING,
     view: DataTypes.TEXT,
-    controller: DataTypes.TEXT
+    controller: DataTypes.TEXT,
+    pattern: DataTypes.TEXT
   }, {
     classMethods: {
       associate: function(models) {
