@@ -1,0 +1,13 @@
+{
+  "apps" : [{
+    "name"        : "resource-manager",
+    "script"      : "./bin/www",
+    "watch"       : false,
+    "merge_logs"  : true,
+    "cwd"         : "~/resource-manager/",
+    "env": {
+        "PORT": 3000,
+        "NODE_ENV": "production"
+    }
+  }]
+}

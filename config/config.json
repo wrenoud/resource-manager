@@ -14,10 +14,10 @@
     "dialect": "sqlite"
   },
   "production": {
-    "username": "root",
-    "password": null,
-    "database": "database_production",
+    "username": "resource-manager",
+    "password": "6pk^p4$XCgHnXz*%EttaJnmZ",
+    "database": "resource-manager",
     "host": "127.0.0.1",
-    "dialect": "sqlite"
+    "dialect": "mysql"
   }
 }
