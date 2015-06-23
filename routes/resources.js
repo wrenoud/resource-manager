@@ -41,7 +41,7 @@ router.route('/new')
         // create properties with relationship
         return req.models.PropertyDefinition.bulkCreate(properties);
       }).then(function(){
-        res.render('resource_definition_created', { 'ResourceDefinition': definition });
+        res.redirect('./' + definition.name + '/');
       });
   });
 
@@ -80,7 +80,7 @@ router.route('/:name/edit')
     }
     res.locals.ResourceDefinition.updateAttributes(definition)
       .then(function(){
-        res.render('resource_definition_created');
+        res.redirect('./');
       });
   });
 
@@ -215,7 +215,7 @@ router.route('/:name/new')
       }).then(function(){
         return resource.save();
       }).then(function(){
-        res.render('resource_created');
+        res.redirect('./' + resource.id + '/');
       });
   });
 
@@ -318,7 +318,7 @@ router.route('/:name/:id/edit')
     }).then(function(){
         return resource.save();
     }).then(function(){
-      res.render('resource_created');
+      res.redirect('./');
     });
   });
 
