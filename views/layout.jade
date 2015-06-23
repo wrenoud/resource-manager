@@ -45,6 +45,18 @@ html
               a(href='/resources/') Resources
             li
               a(href='/about/') About
+            li.dropdown
+              a.dropdown-toggle(data-toggle="dropdown" role="button") Server 
+                span.caret
+              ul.dropdown-menu
+                li
+                  a(href="http://192.168.0.17:9000/", target="_blank")
+                    img(src="http://192.168.0.17:9000/img/favicon.png", width="32px", height="32px")
+                    |  PM2 Monitor
+                li
+                  a(href="http://192.168.0.17/phpmyadmin", target="_blank")
+                    img(src="http://192.168.0.17/phpmyadmin/favicon.ico", width="32px", height="32px")
+                    |  phpMyAdmin
    
     div.container
       include components/breadcrumb.jade
