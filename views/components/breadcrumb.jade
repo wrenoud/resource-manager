@@ -4,7 +4,7 @@ ol.breadcrumb
       a(href="/resources/") Resources
     li
       a(href="/resources/" + ResourceDefinition.name + '/')= ResourceDefinition.display
-    li.active= Resource.text
+    li.active!= Resource.cache
   else if ResourceDefinition
     li
       a(href="/resources/") Resources

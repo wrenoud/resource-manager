@@ -46,8 +46,13 @@ router.route('/new')
   });
 
 var loadDefinition = function(req, res, next){
-  req.models.ResourceDefinition.findOne({'where': {'name': req.params.name}, 'include':[req.models.PropertyDefinition]})
-    .then(function(def){
+  req.models.ResourceDefinition.findOne({
+    'where': {'name': req.params.name},
+    'include':[{
+      'model': req.models.PropertyDefinition,
+      'include':[req.models.PropertyType]
+    }]
+  }).then(function(def){
       res.locals.ResourceDefinition = def;
       next();
     });
@@ -64,14 +69,7 @@ var loadResource = function(req, res, next){
 router.route('/:name/edit')
   .all(loadDefinition)
   .get(function(req, res, next){
-    Promise.map(res.locals.ResourceDefinition.PropertyDefinitions, function(property_def){
-      return property_def.getPropertyType()
-        .then(function(type){
-          property_def.PropertyType = type;
-        });
-    }).then(function(){
-      res.render('resource_definition_edit');
-    });
+    res.render('resource_definition_edit');
   })
   .post(function(req, res, next){
     var definition = {
@@ -100,7 +98,7 @@ var computeResource = function(property_map, resource){
   var properties = resource.Properties;
   var values = {
     'id': resource.id,
-    'text': resource.text,
+    'cache': resource.cache,
     'properties': [],
     'namedProperties': {}
   };
@@ -116,7 +114,8 @@ var computeResource = function(property_map, resource){
         'id': property.id,
         'name': property_def.name,
         'value': property.value,
-        'definition': property.definition
+        'definition': property.definition,
+        'cache': property.cache
       });
     }else{
       console.log('unknown property definition: ' + property.definition)
@@ -179,11 +178,19 @@ router.route('/:name/new')
             var property = {'definition': property_def.id, 'resource': resource.id};
             if(!property_def.computed){
               property.value = named_properties[property_def.name];
+
+              var template = Handlebars.compile(property_def.PropertyType.view);
+              property.cache = template({'value': property.value});
+
               resolve(property);
             }else{
               var template = Handlebars.compile(property_def.equation);
               sandbox.run(template(named_properties), function(output){
                 property.value = output.result;
+              
+                var template = Handlebars.compile(property_def.PropertyType.view);
+                property.cache = template({'value': property.value});
+                
                 resolve(property);
               })
             }
@@ -201,7 +208,7 @@ router.route('/:name/new')
         }
 
         var definitionTemplate = Handlebars.compile(definition.view);
-        resource.text = definitionTemplate(namedProperties);
+        resource.cache = definitionTemplate(namedProperties);
         console.log(req.body);
         return req.models.Property.bulkCreate(properties);
       }).then(function(){
@@ -260,6 +267,7 @@ router.route('/:name/:id/edit')
     }
 
     Promise.map(property_defs, function(property_def){
+      // compute properties
       return new Promise(function (resolve, reject) {  
         var property = {'definition': property_def.id, 'resource': resource.id};
         if(!property_def.computed){
@@ -275,23 +283,36 @@ router.route('/:name/:id/edit')
 
       });
     }).then(function(properties){
-        // generate resource text from template view
+        // generate resource cache from template view
         var definition = res.locals.ResourceDefinition;
-        var property_map = getMappedProperties(definition);
+        var property_def_map = getMappedProperties(definition);
 
         var namedProperties = {};
         for(key in properties){
-          property = property_map[properties[key].definition];
-          namedProperties[property.name] = properties[key].value;
+          var property = properties[key];
+          var property_def = property_def_map[property.definition];
+          namedProperties[property_def.name] = property.value;
+
+          // recompute property cache if value changed
+          if(property_map[property.definition].value !== property.value){
+            var template = Handlebars.compile(property_def.PropertyType.view);
+            property.cache = template({'value': property.value});
+          }
         }
 
         var definitionTemplate = Handlebars.compile(definition.view);
-        resource.text = definitionTemplate(namedProperties);
+        resource.cache = definitionTemplate(namedProperties);
 
         return properties;
     }).map(function(property){
-      property_map[property.definition].value = property.value;
-      return property_map[property.definition].save();
+      // save property value and cache if value changed
+      if(property_map[property.definition].value !== property.value){
+        property_map[property.definition].value = property.value;
+        property_map[property.definition].cache = property.cache;
+        return property_map[property.definition].save();        
+      }else{
+        return;
+      }
     }).then(function(){
         return resource.save();
     }).then(function(){

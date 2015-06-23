@@ -3,7 +3,7 @@ extends layout
 block head
 
 block headline
-  h1= Resource.text
+  h1!= Resource.cache
     |  
     a.btn.btn-primary(href="./edit")
       span.glyphicon.glyphicon-pencil(aria-hidden="true")
@@ -14,4 +14,4 @@ block content
     each property in Resource.properties
       tr
         th= property.name
-        td= property.value
+        td!= property.cache

@@ -49,13 +49,13 @@ block content
     ul.list-group
       each resource in Resources
         li.list-group-item(id="resource_#{resource.id}")
-          a(href='/resources/#{ResourceDefinition.name}/#{resource.id}/')= resource.text
+          a(href='/resources/#{ResourceDefinition.name}/#{resource.id}/')!= resource.cache
           div.pull-right
             a.btn.btn-xs.btn-primary(href="/resources/#{ResourceDefinition.name}/#{resource.id}/edit")
               span.glyphicon.glyphicon-pencil(aria-hidden="true")
               |  Edit
             |  
-            a.btn.btn-xs.btn-primary(data-action="delete", data-id=resource.id, data-name=resource.text, data-toggle="modal", data-target="#deleteModal" href="#")
+            a.btn.btn-xs.btn-primary(data-action="delete", data-id=resource.id, data-name=resource.cache, data-toggle="modal", data-target="#deleteModal" href="#")
               span.glyphicon.glyphicon-remove(aria-hidden="true")
   else
     p
