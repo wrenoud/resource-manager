@@ -162,7 +162,7 @@ router.route('/:name/new')
         for(key in property_defs){
           var property_def = property_defs[key];
           if(!property_def.computed){
-            if(property_def.name in req.body){
+            if(property_def.name in req.body && req.body[property_def.name] !== ""){
               // TODO validation
               named_properties[property_def.name] = req.body[property_def.name];
             }else{
