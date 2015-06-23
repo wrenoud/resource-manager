@@ -2,13 +2,14 @@ extends layout
 
 block head
 
-
-block content
-  h1= ResourceDefinition.display
+block headline
+  h1= Resource.text
     |  
     a.btn.btn-primary(href="./edit")
       span.glyphicon.glyphicon-pencil(aria-hidden="true")
       |  Edit
+
+block content
   table.table
     each property in Resource.properties
       tr

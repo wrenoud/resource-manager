@@ -1,0 +1,38 @@
+extends layout
+
+block head
+  script.
+    $(function () {
+      $('[data-toggle="popover"]').popover()
+    })
+block headline
+  h1 Edit Resource Definition
+
+block content
+  div
+    form(method="post")
+      #resource
+        div.form-group
+          label Name
+          input.form-control(type="text", name="name", value=ResourceDefinition.name)
+        div.form-group
+          label Display Name
+          input.form-control(type="text", name="display", value=ResourceDefinition.display)
+        div.form-group
+          label Description
+          input.form-control(type="text", name="description", value=ResourceDefinition.description)
+        div.form-group
+          label
+            | View 
+            span.glyphicon.glyphicon-info-sign(tabindex='0' data-toggle="popover" data-placement="right" data-trigger="focus" title="Resource View" data-content="This is a template for rendering individual resources in a list. Use double curly braces around a property name and the named property value will be substituted.")
+          input.form-control(type="text", name="view", placeholder="{{property name}}", value=ResourceDefinition.view)
+        div.clear
+      h3 Properties
+      //include components/property_definition_add.jade
+      ul
+        each property in ResourceDefinition.PropertyDefinitions
+          li
+            b {{#{property.name}}}
+            i  (#{property.PropertyType.name})
+      #submit
+        input(type="submit")

@@ -1,8 +1,10 @@
 extends layout
 
 block head
-  meta(http-equiv="refresh" content="2;URL=./")
+  meta(http-equiv="refresh" content="2;URL=/resources/#{ResourceDefinition.name}/")
+
+block headline
+  h1 Resource Definition Created/Updated
 
 block content
-  h1 Resource Definition Created
   p Redirecting to Resource Definition list

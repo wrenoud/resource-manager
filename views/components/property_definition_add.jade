@@ -5,11 +5,11 @@ script(type='text/javascript').
   var toggleComputed = function(){
     var index = this.id.split("_")[1];
     if(this.checked){
-      $('#properties_'+index+'_equation_container').show();
-      $('#properties_'+index+'_default_container').hide();
+      $('#properties_'+index+'_equation').prop('disabled', false);
+      $('#properties_'+index+'_default').prop('disabled', true);
     }else{
-      $('#properties_'+index+'_equation_container').hide();
-      $('#properties_'+index+'_default_container').show();
+      $('#properties_'+index+'_equation').prop('disabled', true);
+      $('#properties_'+index+'_default').prop('disabled', false);
     }
   }
 
@@ -35,27 +35,35 @@ script(type='text/javascript').
   #properties_noforms_template
     p No Properties
   #properties_template
-    div.form-element
-      label Name
-        input(type='text', id='properties_#index#_name', name='properties[#index#][name]')
-    div.form-element
-      label Type
-        select(id='properties_#index#_name', name='properties[#index#][type]')
-          option
-          each val in PropertyTypes
-            option(value=val.id)= val.name
-    div.form-element
-      label Computed
-        input(type='checkbox', id='properties_#index#_computed', name='properties[#index#][computed]', value="true")
-    div.form-element.hidden(id='properties_#index#_equation_container' style='display:none')
-      label Equation
-        input(type='text', id='properties_#index#_equation', name='properties[#index#][equation]')
-    div.form-element(id='properties_#index#_default_container')
-      label Default
-        input(type='text', id='properties_#index#_default', name='properties[#index#][default]')
-    div.clear
-  #properties_controls
-    #properties_add
-      button Add Property
-    #properties_remove_last
-      button Remove Last
+    div.panel.panel-default
+      div.panel-heading
+        h3.panel-title.clearfix Property Definition
+          button.btn.btn-xs.btn-default.pull-right(id="properties_remove_current")
+            span.glyphicon.glyphicon-remove
+
+      div.panel-body
+        div.row
+          div.col-md-3.col-xs-8
+            div.form-group
+              input.form-control(type='text', id='properties_#index#_name', name='properties[#index#][name]', placeholder="Name")
+          div.col-md-2.col-xs-4
+            div.form-group
+              select.form-control(id='properties_#index#_name', name='properties[#index#][type]')
+                option Type
+                each val in PropertyTypes
+                  option(value=val.id)= val.name
+          div.col-md-4.col-xs-6
+            div.input-group
+              span.input-group-addon
+                input(type='checkbox', id='properties_#index#_computed', name='properties[#index#][computed]', value="true")
+              input.form-control(type='text', id='properties_#index#_equation', name='properties[#index#][equation]', placeholder="Equation", disabled='disabled')
+          div.col-md-3.col-xs-6
+            div.form-group
+              input.form-control(type='text', id='properties_#index#_default', name='properties[#index#][default]', placeholder="Default Value")
+  #properties_controls.btn-group(role="group")
+    button.btn.btn-default(id="properties_add")
+      span.glyphicon.glyphicon-plus
+      |  Add Property
+    button.btn.btn-default(id="properties_remove_last")
+      span.glyphicon.glyphicon-remove
+      |  Remove Last

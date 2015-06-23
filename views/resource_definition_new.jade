@@ -1,26 +1,29 @@
 extends layout
 
 block head
-  
+  script.
+    $(function () {
+      $('[data-toggle="popover"]').popover()
+    })
+block headline
+  h1 New Resource Definition
 
 block content
-  h1 New Resource Definition
   div
     form(method="post")
       #resource
-        div.form-element
-          label Name
-            input(type="text", name="name")
-        div.form-element
-          label Display Name
-            input(type="text", name="display")
+        div.form-group
+          input.form-control(type="text", name="name", placeholder="Name")
+        div.form-group
+          input.form-control(type="text", name="display", placeholder="Display Name")
         div.clear
-        div.form-element
-          label Description
-            input(type="text", name="description")
-        div.form-element
-          label View
-            input(type="text", name="view")
+        div.form-group
+          input.form-control(type="text", name="description", placeholder="Description")
+        div.form-group
+          label
+            | View 
+            span.glyphicon.glyphicon-info-sign(tabindex='0' data-toggle="popover" data-placement="right" data-trigger="focus" title="Resource View" data-content="This is a template for rendering individual resources in a list. Use double curly braces around a property name and the named property value will be substituted.")
+          input.form-control(type="text", name="view", placeholder="{{property name}}")
         div.clear
       h3 Properties
       include components/property_definition_add.jade

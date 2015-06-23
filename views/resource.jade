@@ -1,21 +1,67 @@
 extends layout
 
 block head
+  script(type='text/javascript').
+    $(function () {
+      $('#deleteModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var id = button.data('id');
+        var name = button.data('name');
+        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+        var modal = $(this)
+        modal.find('.modal-title').text('Delete ' + name);
+        modal.find('.modal-body p').text('Are you sure you want to delete ' + name + '?');
+        modal.find('.modal-body input').val(id);
+      });
+      $("#deleteModal").on("click", ".btn-danger", function(event){
+        //event.preventDefault();
+        var modal = $("#deleteModal");
+        var id = modal.find('.modal-body input').val();
+        
+        $.ajax({
+          url: '/resources/#{ResourceDefinition.name}/' + id + '/delete',
+          type: 'DELETE',
+          success: function(data, status, xhr){
+            if(data.success){
+              $("#resource_" + data.result.id).remove();
+            }
+          }
+        });
+        modal.modal('hide');
+      });
+    });
 
-
-block content
+block headline
   h1= ResourceDefinition.display
     |  
+    a.btn.btn-primary(href="./edit")
+      span.glyphicon.glyphicon-pencil
+      |  Edit
+    |  
     a.btn.btn-primary(href="./new")
-      span.glyphicon.glyphicon-plus(aria-hidden="true")
+      span.glyphicon.glyphicon-plus
       |  #{ResourceDefinition.display}
+
+block content
+  p= ResourceDefinition.description
   if Resources.length > 0
-    div.list-group
-      each val in Resources
-        a.list-group-item(href='/resources/' + ResourceDefinition.name + '/' + val.id + '/')= val.template
-    a.btn.btn-primary(href="./new")
-      span.glyphicon.glyphicon-plus(aria-hidden="true")
-      |  #{ResourceDefinition.display}
+    ul.list-group
+      each resource in Resources
+        li.list-group-item(id="resource_#{resource.id}")
+          a(href='/resources/#{ResourceDefinition.name}/#{resource.id}/')= resource.text
+          div.pull-right
+            a.btn.btn-xs.btn-primary(href="/resources/#{ResourceDefinition.name}/#{resource.id}/edit")
+              span.glyphicon.glyphicon-pencil(aria-hidden="true")
+              |  Edit
+            |  
+            a.btn.btn-xs.btn-primary(data-action="delete", data-id=resource.id, data-name=resource.text, data-toggle="modal", data-target="#deleteModal" href="#")
+              span.glyphicon.glyphicon-remove(aria-hidden="true")
   else
     p
-      | *** No Resources found. ***
+      | *** No Resources ***
+  a.btn.btn-primary(href="./new")
+    span.glyphicon.glyphicon-plus(aria-hidden="true")
+    |  #{ResourceDefinition.display}
+
+  include components/delete_modal.jade

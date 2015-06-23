@@ -1,5 +1,6 @@
 module.exports = function(sequelize, DataTypes) {
   var Resource = sequelize.define('Resource', {
+    'text': DataTypes.TEXT
   }, {
     classMethods: {
       associate: function(models) {
