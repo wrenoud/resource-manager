@@ -3,8 +3,8 @@ var router = express.Router();
 var Handlebars = require('handlebars');
 
 var Promise = require('bluebird');
-var Sandbox = require('sandbox')
-  , sandbox = new Sandbox();
+
+var math = require('mathjs');
 
 router.route('/')
   .get(function(req, res, next) {
@@ -184,15 +184,16 @@ router.route('/:name/new')
 
               resolve(property);
             }else{
-              var template = Handlebars.compile(property_def.equation);
-              sandbox.run(template(named_properties), function(output){
-                property.value = output.result;
-              
-                var template = Handlebars.compile(property_def.PropertyType.view);
-                property.cache = template({'value': property.value});
-                
-                resolve(property);
-              })
+              try{
+                property.value = math.eval(property_def.equation, named_properties);
+              }catch(e){
+                property.value = 'NaN';
+              }
+
+              var template = Handlebars.compile(property_def.PropertyType.view);
+              property.cache = template({'value': property.value});
+
+              resolve(property);
             }
           });
         });
@@ -274,11 +275,12 @@ router.route('/:name/:id/edit')
           property.value = named_properties[property_def.name];
           resolve(property);
         }else{
-          var template = Handlebars.compile(property_def.equation)
-          sandbox.run(template(named_properties), function(output){
-            property.value = output.result;
-            resolve(property);
-          })
+          try{
+            property.value = math.eval(property_def.equation, named_properties);
+          }catch(e){
+            property.value = 'NaN';
+          }
+          resolve(property);
         }
 
       });
