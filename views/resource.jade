@@ -34,14 +34,14 @@ block head
 
 block headline
   h1= ResourceDefinition.display
-    |  
-    a.btn.btn-primary(href="./edit")
-      span.glyphicon.glyphicon-pencil
-      |  Edit
-    |  
-    a.btn.btn-primary(href="./new")
-      span.glyphicon.glyphicon-plus
-      |  #{ResourceDefinition.display}
+    div.pull-right  
+      a.btn.btn-primary(href="./edit")
+        span.glyphicon.glyphicon-pencil
+        |  Edit
+      |  
+      a.btn.btn-primary(href="./new")
+        span.glyphicon.glyphicon-plus
+        |  #{ResourceDefinition.display}
 
 block content
   p= ResourceDefinition.description
