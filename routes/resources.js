@@ -84,6 +84,25 @@ router.route('/:name/edit')
       });
   });
 
+router.route('/:name/delete')
+  .all(loadDefinition)
+  .delete(function(req, res, next){
+    var definition = res.locals.ResourceDefinition;
+    console.log(definition.PropertyDefinitions);
+
+    Promise.map(definition.PropertyDefinitions, function(property_def){
+      return req.models.Property.destroy({'where': {'definition': property_def.id}})
+    }).then(function(destroyed){
+      return req.models.PropertyDefinition.destroy({'where': {'definition': definition.id}});
+    }).then(function(destroyed){
+      return req.models.Resource.destroy({'where': {'definition': definition.id}});
+    }).then(function(destroyed){
+      return req.models.ResourceDefinition.destroy({'where': {'id': definition.id}});
+    }).then(function(destroyed){
+      res.json({'success': true, 'result': {'id':  definition.id}});
+    });
+  });
+
 // Resource Routes
 var getMappedProperties = function(definition){
   var propertyDefMap = {}
