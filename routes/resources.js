@@ -118,8 +118,7 @@ var computeResource = function(property_map, resource){
   var values = {
     'id': resource.id,
     'cache': resource.cache,
-    'properties': [],
-    'namedProperties': {}
+    'properties': {}
   };
 
   // populate values
@@ -128,14 +127,13 @@ var computeResource = function(property_map, resource){
     if(property.definition in property_map)
     {
       var property_def = property_map[property.definition];
-      values.namedProperties[property_def.name] = property.value;
-      values.properties.push({
+      values.properties[property_def.name] = {
         'id': property.id,
         'name': property_def.name,
         'value': property.value,
         'definition': property.definition,
         'cache': property.cache
-      });
+      };
     }else{
       console.log('unknown property definition: ' + property.definition)
       //TODO: ERROR, unknown property definition

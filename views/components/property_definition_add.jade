@@ -48,7 +48,7 @@ script(type='text/javascript').
               input.form-control(type='text', id='properties_#index#_name', name='properties[#index#][name]', placeholder="Name", required)
           div.col-md-2.col-xs-4
             div.form-group
-              select.form-control(id='properties_#index#_name', name='properties[#index#][type]', pattern=".+")
+              select.form-control(id='properties_#index#_name', name='properties[#index#][type]')
                 option(value="", disabled, selected) Select type
                 each val in PropertyTypes
                   option(value=val.id)= val.name

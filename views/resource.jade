@@ -51,11 +51,6 @@ block head
         }
       });
 
-      // clickable resources
-      $("#listView .panel-heading").on('click', function(event){
-        if(event.target == this || event.target == this.children[0])
-          window.location.href = $(this).find('a')[0].href;
-      });
     });
 
 block headline
@@ -90,7 +85,7 @@ block content
           each resource in Resources
             tr(id="resource_#{resource.id}_tr", href="/resources/#{ResourceDefinition.name}/#{resource.id}/")
               each property in ResourceDefinition.PropertyDefinitions
-                td= resource.namedProperties[property.name]
+                td= resource.properties[property.name].cache
               td
                 div.btn-group.btn-group-flex
                   a.btn.btn-xs.btn-primary(href="/resources/#{ResourceDefinition.name}/#{resource.id}/edit")
