@@ -11,7 +11,7 @@ block content
       #resource
         each property in ResourceDefinition.PropertyDefinitions
           div.form-group
-            em.col-sm-2.control-label (#{PropertyDefinitions[property.definition].PropertyType.name})
+            em.col-sm-2.control-label (#{property.PropertyType.name})
             label.col-sm-2.control-label(for=property.name)= property.name 
             div.col-sm-8
               if property.computed
