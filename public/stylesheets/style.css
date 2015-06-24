@@ -1,3 +1,20 @@
 body {
 }
 
+input:invalid{
+  border-color: #b94a48;
+}
+
+/* Definition List View */
+.clickable{
+  cursor: pointer;
+}
+
+
+/* Resource List View */
+.btn-group-flex {
+  display: flex;
+}
+#listView .btn{
+  margin-bottom: 15px;
+}

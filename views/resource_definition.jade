@@ -30,6 +30,13 @@ block head
         });
         modal.modal('hide');
       });
+
+      // clickable resource definition
+      $(".list-group .list-group-item").on('click', function(event){
+        if(event.target == this || event.target == this.children[0])
+          window.location.href = $(this).find('a')[0].href;
+      });
+
     });
 
 block headline
@@ -43,7 +50,7 @@ block content
   if ResourceDefinitions.length > 0
     ul.list-group
       each definition in ResourceDefinitions
-        li.list-group-item(id="definition_#{definition.id}")
+        li.list-group-item.clickable(id="definition_#{definition.id}")
           a(href='/resources/' + definition.name + "/")= definition.display
           div.pull-right
             a.btn.btn-xs.btn-primary(href="/resources/#{definition.name}/edit")

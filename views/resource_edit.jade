@@ -11,16 +11,19 @@ block content
       #resource
         each property in Resource.properties
           div.form-group
-            label.col-sm-3.control-label= property.name
-            div.col-sm-9
+            em.col-sm-2.control-label (#{PropertyDefinitions[property.definition].PropertyType.name})
+            label.col-sm-2.control-label(for=property.name)= property.name 
+            div.col-sm-8
               if PropertyDefinitions[property.definition].computed
                 input.form-control(type="text", disabled="disabled", value=PropertyDefinitions[property.definition].equation)
               else
                 input.form-control(
                   type="text",
+                  id=property.name,
                   name=property.name,
                   value=property.value,
                   pattern=PropertyDefinitions[property.definition].PropertyType.pattern,
                   title=PropertyDefinitions[property.definition].PropertyType.name)
       #submit
-        input(type="submit")
+        div.form-group
+          input.form-control.btn.btn-primary(type="submit", value="Save")

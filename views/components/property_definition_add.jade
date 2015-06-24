@@ -45,11 +45,11 @@ script(type='text/javascript').
         div.row
           div.col-md-3.col-xs-8
             div.form-group
-              input.form-control(type='text', id='properties_#index#_name', name='properties[#index#][name]', placeholder="Name")
+              input.form-control(type='text', id='properties_#index#_name', name='properties[#index#][name]', placeholder="Name", required)
           div.col-md-2.col-xs-4
             div.form-group
-              select.form-control(id='properties_#index#_name', name='properties[#index#][type]')
-                option Type
+              select.form-control(id='properties_#index#_name', name='properties[#index#][type]', pattern=".+")
+                option(value="", disabled, selected) Select type
                 each val in PropertyTypes
                   option(value=val.id)= val.name
           div.col-md-4.col-xs-6
@@ -60,10 +60,11 @@ script(type='text/javascript').
           div.col-md-3.col-xs-6
             div.form-group
               input.form-control(type='text', id='properties_#index#_default', name='properties[#index#][default]', placeholder="Default Value")
-  #properties_controls.btn-group(role="group")
-    button.btn.btn-default(id="properties_add")
-      span.glyphicon.glyphicon-plus
-      |  Add Property
-    button.btn.btn-default(id="properties_remove_last")
-      span.glyphicon.glyphicon-remove
-      |  Remove Last
+  #properties_controls.form-group
+    div.btn-group(role="group")
+      button.btn.btn-default(id="properties_add")
+        span.glyphicon.glyphicon-plus
+        |  Add Property
+      button.btn.btn-default(id="properties_remove_last")
+        span.glyphicon.glyphicon-remove
+        |  Remove Last
