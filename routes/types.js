@@ -11,7 +11,7 @@ router.route('/')
 
 router.route('/new')
   .get(function(req, res, next) {
-    res.render("construction");
+    res.render("type_new");
   })
   .post(function(req, res, next) {
     res.render("construction");
@@ -24,7 +24,7 @@ router.route('/:id')
 
 router.route('/:id/edit')
   .get(function(req, res, next) {
-    res.render("construction");
+    res.render("type_edit");
   })
   .post(function(req, res, next) {
     res.render("construction");

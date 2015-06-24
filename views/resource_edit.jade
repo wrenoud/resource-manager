@@ -1,9 +1,20 @@
 extends layout
 
+include components/breadcrumb
+
 block head
   
 block headline
-  h1 New #{ResourceDefinition.display} Definition
+  +breadcrumbs("Edit",
+    {
+      'name': ResourceDefinition.display,
+      'path': appPath(ResourceDefinition.name)
+    },{
+      'name': Resource.cache,
+      'path': appPath(ResourceDefinition.name, Resource.id)
+    })
+
+  h1 Edit #{ResourceDefinition.display} Item
   
 block content
   div

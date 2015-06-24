@@ -1,10 +1,17 @@
 extends layout
 
+include components/breadcrumb
 include components/buttons
 
 block head
 
 block headline
+  +breadcrumbs(Resource.cache,
+    {
+      'name': ResourceDefinition.display,
+      'path': appPath(ResourceDefinition.name)
+    })
+
   h1!= Resource.cache
     |  
     +button_edit( appPath(ResourceDefinition.name, Resource.id) )

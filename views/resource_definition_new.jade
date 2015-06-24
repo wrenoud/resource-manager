@@ -1,5 +1,7 @@
 extends layout
 
+include components/breadcrumb
+
 block head
   script.
     function slugify(text){
@@ -26,6 +28,8 @@ block head
       });
     })
 block headline
+  +breadcrumbs("New")
+
   h1 New Resource Definition
 
 block content

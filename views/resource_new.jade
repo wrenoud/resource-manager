@@ -1,8 +1,16 @@
 extends layout
 
+include components/breadcrumb
+
 block head
   
 block headline
+  +breadcrumbs("New",
+    {
+      'name': ResourceDefinition.display,
+      'path': appPath(ResourceDefinition.name)
+    })
+
   h1 New #{ResourceDefinition.display} Definition
   
 block content

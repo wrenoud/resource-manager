@@ -1,8 +1,16 @@
 extends layout
 
+include components/breadcrumb
+
 block head
 
 block headline
+  +breadcrumbs("New",
+    {
+      'name': "Property Types",
+      'path': appPath('types')
+    })
+
   h1 Under Construction
   
 block content

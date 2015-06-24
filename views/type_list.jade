@@ -1,5 +1,6 @@
 extends layout
 
+include components/breadcrumb
 include components/buttons
 include components/modal_delete
 
@@ -21,6 +22,8 @@ block head
     });
 
 block headline
+  +breadcrumbs("Property Types")
+
   h1 Property Types
     div.pull-right
       +button_add('Property Type',  appPath('types') )
@@ -42,4 +45,3 @@ block content
   +button_add('Property Type',  appPath('types') )
   
   +modal_delete("Property Type",  appPath('type'), "delete_success")
-  

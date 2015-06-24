@@ -1,11 +1,16 @@
 extends layout
 
+include components/breadcrumb
+
 block head
   script.
     $(function () {
       $('[data-toggle="popover"]').popover()
     })
 block headline
+  +breadcrumbs("Edit",
+    {'name': ResourceDefinition.display, 'path': appPath(ResourceDefinition.name) })
+
   h1 Edit Resource Definition
 
 block content

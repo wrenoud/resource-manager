@@ -1,5 +1,6 @@
 extends layout
 
+include components/breadcrumb
 include components/buttons
 include components/modal_delete
 
@@ -33,6 +34,8 @@ block head
     });
 
 block headline
+  +breadcrumbs(ResourceDefinition.display)
+
   h1= ResourceDefinition.display
     div.pull-right
       div.btn-group
