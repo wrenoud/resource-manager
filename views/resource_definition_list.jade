@@ -5,24 +5,14 @@ include components/modal_delete
 
 block head
   script(type='text/javascript').
-    $(function () {
-      $("#deleteModal").on("click", ".btn-danger", function(event){
-        //event.preventDefault();
-        var modal = $("#deleteModal");
-        var id = modal.find('.modal-body input').val();
-        
-        $.ajax({
-          url: '/resources/'+ id +'/delete',
-          type: 'DELETE',
-          success: function(data, status, xhr){
-            if(data.success){
-              $("#definition_" + data.result.id).remove();
-            }
-          }
-        });
-        modal.modal('hide');
-      });
+    // ajax delete success response
+    var delete_success = function(data, status, xhr){
+      if(data.success){
+        $("#definition_" + data.result.id).remove();
+      }
+    };
 
+    $(function () {
       // clickable resource definition
       $(".list-group .list-group-item").on('click', function(event){
         if(event.target == this || event.target == this.children[0])
@@ -52,4 +42,4 @@ block content
       | *** No Resource Definitions found. ***
   +button_add("Resource")
   
-  +modal_delete("Resource Definition")
+  +modal_delete("Resource Definition",'/resources/',"delete_success")

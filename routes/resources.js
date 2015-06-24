@@ -13,7 +13,7 @@ router.route('/')
   .get(function(req, res, next) {
     req.models.ResourceDefinition.findAll()
       .then(function(defs){
-        res.render('resource_definition', { 'ResourceDefinitions': defs });
+        res.render('resource_definition_list', { 'ResourceDefinitions': defs });
       });
   });
 
@@ -160,7 +160,7 @@ router.route("/:name/")
           var values = computeResource(property_map, resource);
           flatResources.push(values);
         }
-        res.render('resource', { 'Resources': flatResources });
+        res.render('resource_list', { 'Resources': flatResources });
       });
   });
 

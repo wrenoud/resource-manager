@@ -5,26 +5,15 @@ include components/modal_delete
 
 block head
   script(type='text/javascript').
-    $(function () {
-      // modal confirm delete
-      $("#deleteModal").on("click", ".btn-danger", function(event){
-        //event.preventDefault();
-        var modal = $("#deleteModal");
-        var id = modal.find('.modal-body input').val();
-        
-        $.ajax({
-          url: '/resources/#{ResourceDefinition.name}/' + id + '/delete',
-          type: 'DELETE',
-          success: function(data, status, xhr){
-            if(data.success){
-              $("#resource_" + data.result.id + "_tr").remove();
-              $("#resource_" + data.result.id + "_li").remove();
-            }
-          }
-        });
-        modal.modal('hide');
-      });
+    // ajax delete success response
+    var delete_success = function(data, status, xhr){
+      if(data.success){
+        $("#resource_" + data.result.id + "_tr").remove();
+        $("#resource_" + data.result.id + "_li").remove();
+      }
+    }
 
+    $(function () {
       // view toggles
       $("[data-action='collapse']").on("click", function(event){
         if(! $(this).hasClass('active'))
@@ -87,4 +76,4 @@ block content
       | *** No Resources ***
   +button_add(ResourceDefinition.display)
 
-  +modal_delete("Resource")
+  +modal_delete("Resource",'/resources/' + ResourceDefinition.name + '/',"delete_success")

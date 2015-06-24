@@ -2,7 +2,7 @@ mixin modal_delete_button_small(id, name)
   button.btn.btn-xs.btn-primary(data-action="delete", data-id=id, data-name=name, data-toggle="modal", data-target="#deleteModal")
     span.glyphicon.glyphicon-remove(aria-hidden="true")
 
-mixin modal_delete(type)
+mixin modal_delete(type, endpoint, success)
   script.
     $(function () {
       $('#deleteModal').on('show.bs.modal', function (event) {
@@ -15,6 +15,20 @@ mixin modal_delete(type)
         modal.find('.modal-title').text('Delete #{type} ' + name);
         modal.find('.modal-body p').text('Are you sure you want to delete ' + name + '?');
         modal.find('.modal-body input').val(id);
+      });
+
+      // modal confirm delete
+      $("#deleteModal").on("click", ".btn-danger", function(event){
+        //event.preventDefault();
+        var modal = $("#deleteModal");
+        var id = modal.find('.modal-body input').val();
+        
+        $.ajax({
+          url: '#{endpoint}' + id +'/delete',
+          type: 'DELETE',
+          success: #{success}
+        });
+        modal.modal('hide');
       });
     });
 
