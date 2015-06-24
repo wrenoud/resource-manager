@@ -17,6 +17,11 @@ router.route('/new')
     res.render("construction");
   });
 
+router.route('/:id')
+  .get(function(req, res, next) {
+    res.render("construction");
+  })
+
 router.route('/:id/edit')
   .get(function(req, res, next) {
     res.render("construction");
@@ -24,5 +29,10 @@ router.route('/:id/edit')
   .post(function(req, res, next) {
     res.render("construction");
   });
+
+router.route('/:id/delete')
+  .delete(function(req, res, next) {
+    res.json({'success': false, 'message': 'Under Construction'});
+  })
 
 module.exports = router;
