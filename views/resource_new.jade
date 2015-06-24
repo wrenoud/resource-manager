@@ -11,8 +11,9 @@ block content
       #resource
         each property in ResourceDefinition.PropertyDefinitions
           div.form-group
-            label.col-sm-3.control-label= property.name
-            div.col-sm-9
+            em.col-sm-2.control-label (#{PropertyDefinitions[property.definition].PropertyType.name})
+            label.col-sm-2.control-label(for=property.name)= property.name 
+            div.col-sm-8
               if property.computed
                 input.form-control(type="text", disabled="disabled", value=property.equation)
               else
