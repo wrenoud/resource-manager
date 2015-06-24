@@ -85,7 +85,7 @@ block content
           each resource in Resources
             tr(id="resource_#{resource.id}_tr", href="/resources/#{ResourceDefinition.name}/#{resource.id}/")
               each property in ResourceDefinition.PropertyDefinitions
-                td= resource.properties[property.name].cache
+                td!= resource.properties[property.name].cache
               td
                 div.btn-group.btn-group-flex
                   a.btn.btn-xs.btn-primary(href="/resources/#{ResourceDefinition.name}/#{resource.id}/edit")
