@@ -24,7 +24,7 @@ mixin modal_delete(type, endpoint, success)
         var id = modal.find('.modal-body input').val();
         
         $.ajax({
-          url: '#{endpoint}' + id +'/delete',
+          url: '#{endpoint}/' + id +'/delete',
           type: 'DELETE',
           success: #{success}
         });

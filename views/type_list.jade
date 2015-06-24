@@ -4,26 +4,42 @@ include components/buttons
 include components/modal_delete
 
 block head
+  script(type='text/javascript').
+    // ajax delete success response
+    var delete_success = function(data, status, xhr){
+      if(data.success){
+        $("#definition_" + data.result.id + "_li").remove();
+      }
+    }
+
+    $(function () {
+      // clickable resource definition
+      $(".list-group .list-group-item").on('click', function(event){
+        if(event.target == this || event.target == this.children[0])
+          window.location.href = $(this).find('a')[0].href;
+      });
+    });
 
 block headline
   h1 Property Types
     div.pull-right
-      +button_add('Property Type')
+      +button_add('Property Type',  appPath('types') )
 
 block content
   if PropertyTypes.length > 0
     ul.list-group
       each definition in PropertyTypes
         li.list-group-item.clickable(id="definition_#{definition.id}")
-          a(href='/resources/types/' + definition.id + "/")= definition.name
+          a(href=appPath('types', definition.id ))= definition.name
           div.pull-right
-            +button_edit_small("/resources/types/#{definition.id}/edit")
+            +button_edit_small( appPath('types', definition.id) )
             |  
-            +modal_delete_button_small(definition.id, definition.name)
+            +modal_delete_button_small( definition.id, definition.name )
 
   else
     p
       | *** No Resource Definitions found. ***
-  +button_add('Property Type')
+  +button_add('Property Type',  appPath('types') )
   
-  +modal_delete("Property Type")
+  +modal_delete("Property Type",  appPath('type'), "delete_success")
+  

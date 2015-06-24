@@ -1,14 +1,14 @@
 ol.breadcrumb
   if ResourceDefinition && Resource
     li
-      a(href="/resources/") Resources
+      a(href=appPath()) Resources
     li
-      a(href="/resources/" + ResourceDefinition.name + '/')= ResourceDefinition.display
+      a(href=appPath( ResourceDefinition.name ))= ResourceDefinition.display
     li.active!= Resource.cache
   else if ResourceDefinition
     li
-      a(href="/resources/") Resources
+      a(href=appPath()) Resources
     li.active
-      a(href="/resources/" + ResourceDefinition.name + '/')= ResourceDefinition.display
+      a(href=appPath( ResourceDefinition.name ))= ResourceDefinition.display
   else
     li.active Resources

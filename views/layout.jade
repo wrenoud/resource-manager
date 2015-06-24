@@ -42,15 +42,15 @@ html
         #navbar.navbar-collapse.collapse
           ul.nav.navbar-nav.navbar-right
             li
-              a(href='/resources/') Resources
+              a(href=appPath()) Resources
             li
-              a(href='/about/') About
+              a(href=appPath('about')) About
             li.dropdown
               a.dropdown-toggle(data-toggle="dropdown" role="button") Tools 
                 span.caret
               ul.dropdown-menu
                 li
-                  a(href="/resources/types/")
+                  a(href=appPath('types'))
                     span.glyphicon.glyphicon-pencil
                     |  Edit Types
                 li.divider

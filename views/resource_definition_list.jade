@@ -18,28 +18,27 @@ block head
         if(event.target == this || event.target == this.children[0])
           window.location.href = $(this).find('a')[0].href;
       });
-
     });
 
 block headline
   h1 Resources
     div.pull-right
-      +button_add("Resource")
+      +button_add( "Resource", appPath() )
 
 block content
   if ResourceDefinitions.length > 0
     ul.list-group
       each definition in ResourceDefinitions
         li.list-group-item.clickable(id="definition_#{definition.id}")
-          a(href='/resources/' + definition.name + "/")= definition.display
+          a(href=appPath( definition.name ))= definition.display
           div.pull-right
-            +button_edit_small("/resources/#{definition.name}/edit")
+            +button_edit_small( appPath(definition.name) )
             |  
-            +modal_delete_button_small(definition.name, definition.display)
+            +modal_delete_button_small( definition.name, definition.display )
 
   else
     p
       | *** No Resource Definitions found. ***
-  +button_add("Resource")
+  +button_add( "Resource", appPath() )
   
-  +modal_delete("Resource Definition",'/resources/',"delete_success")
+  +modal_delete( "Resource Definition", appPath(), "delete_success" )

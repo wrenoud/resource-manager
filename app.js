@@ -46,8 +46,19 @@ app.use(function(req,res,next){
   next();
 });
 
+app.locals.APP_PATH = '/resources';
+app.locals.appPath = function(){
+  var args = Array.prototype.slice.call(arguments).map(String);
+  args.unshift(app.locals.APP_PATH);
+  return path.join.apply(null, args).replace(/\\/g,'/');
+};
+app.locals.path = function(){
+  var args = Array.prototype.slice.call(arguments).map(String);
+  return path.join.apply(null, args).replace(/\\/g,'/');
+};
+
 app.use('/', index);
-app.use('/resources', resources);
+app.use(app.locals.APP_PATH, resources);
 
 app.locals.runid = uuid.v4();
 app.get('/reload', function(req,res){

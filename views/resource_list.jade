@@ -42,9 +42,9 @@ block headline
         button.btn.btn-default(role="button", data-action="collapse", data-target="#tableView")
           span.glyphicon.glyphicon-menu-hamburger
       |  
-      +button_edit("./edit")
+      +button_edit( appPath(ResourceDefinition.name) )
       |  
-      +button_add(ResourceDefinition.display)
+      +button_add( ResourceDefinition.display, appPath(ResourceDefinition.name) )
 
 block content
   p= ResourceDefinition.description
@@ -58,22 +58,22 @@ block content
             th(width="50px")
         tbody
           each resource in Resources
-            tr(id="resource_#{resource.id}_tr", href="/resources/#{ResourceDefinition.name}/#{resource.id}/")
+            tr(id="resource_#{resource.id}_tr", href=appPath( ResourceDefinition.name, resource.id))
               each property in ResourceDefinition.PropertyDefinitions
                 td!= resource.properties[property.name].cache
               td
                 div.btn-group.btn-group-flex
-                  +button_edit_small("/resources/#{ResourceDefinition.name}/#{resource.id}/edit")
-                  +modal_delete_button_small(resource.id, resource.cache)
+                  +button_edit_small(  appPath(ResourceDefinition.name, resource.id) )
+                  +modal_delete_button_small( resource.id, resource.cache )
 
     div#listView.collapse.in
       div.row
         each resource in Resources
           div.col-xs-12.col-md-4.col-lg-3(id="resource_#{resource.id}_li")
-            a.btn.btn-default.btn-lg.btn-block(href='/resources/#{ResourceDefinition.name}/#{resource.id}/')!= resource.cache
+            a.btn.btn-default.btn-lg.btn-block(href=appPath( ResourceDefinition.name, resource.id ))!= resource.cache
   else
     p
       | *** No Resources ***
-  +button_add(ResourceDefinition.display)
+  +button_add( ResourceDefinition.display,  appPath(ResourceDefinition.name) )
 
-  +modal_delete("Resource",'/resources/' + ResourceDefinition.name + '/',"delete_success")
+  +modal_delete( "Resource", appPath( ResourceDefinition.name ), "delete_success" )

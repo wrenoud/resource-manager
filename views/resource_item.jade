@@ -7,7 +7,7 @@ block head
 block headline
   h1!= Resource.cache
     |  
-    +button_edit("./edit")
+    +button_edit( appPath(ResourceDefinition.name, Resource.id) )
 
 block content
   table.table
