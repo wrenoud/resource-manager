@@ -1,21 +1,11 @@
 extends layout
 
+include components/buttons
+include components/modal_delete
+
 block head
   script(type='text/javascript').
     $(function () {
-      // show modal
-      $('#deleteModal').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget) // Button that triggered the modal
-        var id = button.data('id');
-        var name = button.data('name');
-        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-        var modal = $(this)
-        modal.find('.modal-title').text('Delete ' + name);
-        modal.find('.modal-body p').text('Are you sure you want to delete ' + name + '?');
-        modal.find('.modal-body input').val(id);
-      });
-      
       // modal confirm delete
       $("#deleteModal").on("click", ".btn-danger", function(event){
         //event.preventDefault();
@@ -63,13 +53,9 @@ block headline
         button.btn.btn-default(role="button", data-action="collapse", data-target="#tableView")
           span.glyphicon.glyphicon-menu-hamburger
       |  
-      a.btn.btn-primary(href="./edit")
-        span.glyphicon.glyphicon-pencil
-        |  Edit
+      +button_edit("./edit")
       |  
-      a.btn.btn-primary(href="./new")
-        span.glyphicon.glyphicon-plus
-        |  #{ResourceDefinition.display}
+      +button_add(ResourceDefinition.display)
 
 block content
   p= ResourceDefinition.description
@@ -88,11 +74,8 @@ block content
                 td!= resource.properties[property.name].cache
               td
                 div.btn-group.btn-group-flex
-                  a.btn.btn-xs.btn-primary(href="/resources/#{ResourceDefinition.name}/#{resource.id}/edit")
-                    span.glyphicon.glyphicon-pencil(aria-hidden="true")
-                    span.hidden-xs &nbsp;Edit
-                  a.btn.btn-xs.btn-primary(data-action="delete", data-id=resource.id, data-name=resource.cache, data-toggle="modal", data-target="#deleteModal" href="#")
-                    span.glyphicon.glyphicon-remove(aria-hidden="true")
+                  +button_edit_small("/resources/#{ResourceDefinition.name}/#{resource.id}/edit")
+                  +modal_delete_button_small(resource.id, resource.cache)
 
     div#listView.collapse.in
       div.row
@@ -102,10 +85,6 @@ block content
   else
     p
       | *** No Resources ***
-  div.container
-    div.row
-      a.btn.btn-primary(href="./new")
-        span.glyphicon.glyphicon-plus(aria-hidden="true")
-        |  #{ResourceDefinition.display}
+  +button_add(ResourceDefinition.display)
 
-  include components/delete_modal.jade
+  +modal_delete("Resource")

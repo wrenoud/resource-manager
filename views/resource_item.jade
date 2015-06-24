@@ -1,13 +1,13 @@
 extends layout
 
+include components/buttons
+
 block head
 
 block headline
   h1!= Resource.cache
     |  
-    a.btn.btn-primary(href="./edit")
-      span.glyphicon.glyphicon-pencil(aria-hidden="true")
-      |  Edit
+    +button_edit("./edit")
 
 block content
   table.table

@@ -1,0 +1,29 @@
+extends layout
+
+include components/buttons
+include components/modal_delete
+
+block head
+
+block headline
+  h1 Property Types
+    div.pull-right
+      +button_add('Property Type')
+
+block content
+  if PropertyTypes.length > 0
+    ul.list-group
+      each definition in PropertyTypes
+        li.list-group-item.clickable(id="definition_#{definition.id}")
+          a(href='/resources/types/' + definition.id + "/")= definition.name
+          div.pull-right
+            +button_edit_small("/resources/types/#{definition.id}/edit")
+            |  
+            +modal_delete_button_small(definition.id, definition.name)
+
+  else
+    p
+      | *** No Resource Definitions found. ***
+  +button_add('Property Type')
+  
+  +modal_delete("Property Type")

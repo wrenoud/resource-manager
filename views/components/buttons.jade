@@ -1,0 +1,15 @@
+mixin button_add(name)
+  a.btn.btn-primary(href="./new")
+    span.glyphicon.glyphicon-plus
+    |  
+    span= name
+
+mixin button_edit(href)
+  a.btn.btn-primary(href=href)
+    span.glyphicon.glyphicon-pencil
+    |  Edit
+
+mixin button_edit_small(href)
+  a.btn.btn-xs.btn-primary(href=href)
+    span.glyphicon.glyphicon-pencil
+    |  Edit

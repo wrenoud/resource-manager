@@ -1,10 +1,13 @@
 var express = require('express');
 var router = express.Router();
-var Handlebars = require('handlebars');
 
 var Promise = require('bluebird');
-
+var Handlebars = require('handlebars');
 var math = require('mathjs');
+
+var types = require('./types');
+
+router.use('/types', types);
 
 router.route('/')
   .get(function(req, res, next) {

@@ -1,0 +1,33 @@
+mixin modal_delete_button_small(id, name)
+  button.btn.btn-xs.btn-primary(data-action="delete", data-id=id, data-name=name, data-toggle="modal", data-target="#deleteModal")
+    span.glyphicon.glyphicon-remove(aria-hidden="true")
+
+mixin modal_delete(type)
+  script.
+    $(function () {
+      $('#deleteModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var id = button.data('id');
+        var name = button.data('name');
+        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+        var modal = $(this)
+        modal.find('.modal-title').text('Delete #{type} ' + name);
+        modal.find('.modal-body p').text('Are you sure you want to delete ' + name + '?');
+        modal.find('.modal-body input').val(id);
+      });
+    });
+
+  #deleteModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='deleteModalLabel')
+    .modal-dialog(role='document')
+      .modal-content
+        .modal-header
+          button.close(type='button', data-dismiss='modal', aria-label='Close')
+            span(aria-hidden='true') &times;
+          h4#exampleModalLabel.modal-title Confirm Delete
+        .modal-body
+          input(type="hidden")
+          p 
+        .modal-footer
+          button.btn.btn-default(type='button', data-dismiss='modal') Cancel
+          button.btn.btn-danger(type='button') Delete
