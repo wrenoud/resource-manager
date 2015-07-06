@@ -13,6 +13,7 @@
     "express": "~4.12.2",
     "handlebars": "^3.0.3",
     "jade": "~1.9.2",
+    "jira-connector": "^1.1.0",
     "lodash": "^3.9.3",
     "mathjs": "git://github.com/josdejong/mathjs.git#develop",
     "morgan": "~1.5.1",
