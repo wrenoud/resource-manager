@@ -20,6 +20,7 @@
     "mysql": "^2.7.0",
     "node-uuid": "^1.4.3",
     "passport": "^0.2.2",
+    "passport-anonymous": "^1.0.1",
     "passport-atlassian-oauth": "0.0.1",
     "sandbox": "^0.8.6",
     "sequelize": "^3.1.1",
