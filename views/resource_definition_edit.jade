@@ -9,7 +9,7 @@ block head
     })
 block headline
   +breadcrumbs("Edit",
-    {'name': ResourceDefinition.display, 'path': appPath(ResourceDefinition.name) })
+    {'name': ResourceDefinition.name, 'path': appPath(ResourceDefinition.urn) })
 
   h1 Edit Resource Definition
 
@@ -19,10 +19,10 @@ block content
       #resource
         div.form-group
           label Name
-          input.form-control(type="text", name="name", value=ResourceDefinition.name)
+          input.form-control(type="text", name="name", value=ResourceDefinition.urn)
         div.form-group
           label Display Name
-          input.form-control(type="text", name="display", value=ResourceDefinition.display)
+          input.form-control(type="text", name="display", value=ResourceDefinition.name)
         div.form-group
           label Description
           input.form-control(type="text", name="description", value=ResourceDefinition.description)

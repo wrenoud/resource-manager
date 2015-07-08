@@ -7,7 +7,7 @@ var bodyParser = require('body-parser');
 var uuid = require('node-uuid');
 
 var index = require('./routes/index');
-var resources = require('./routes/resources');
+var resources = require('./routes/resource_definition');
 
 // start app
 var app = express();

@@ -13,10 +13,32 @@ script(type='text/javascript').
     }
   }
 
+  var updateSlug = function(e){
+    var index = this.id.split("_")[1];
+    var urnId = '#properties_'+index+'_'+$(this).data('update');
+
+    var val = $(this).val();
+    var previous = $(this).data('previous');
+    
+    console.log(previous, urnId);
+    
+    if(previous !== undefined && $(urnId).val() !== "")
+    {
+      var current_slug = $(urnId).val();
+      if(current_slug === slugify(previous)){
+        $(urnId).val(slugify(val));
+      }
+    }else{
+      $(urnId).val(slugify(val));
+    }
+
+    $(this).data('previous', val);
+  }
+
   $(document).ready(function() {
     var properties = $('#properties').sheepIt({
         separator: '',
-        allowRemoveLast: true,
+        allowRemoveLast: false,
         allowRemoveCurrent: true,
         allowRemoveAll: false,
         allowAdd: true,
@@ -26,6 +48,8 @@ script(type='text/javascript').
         iniFormsCount: 1,
         afterAdd: function(source, newForm) {
           $(newForm).find("input[type=checkbox]").click(toggleComputed);
+          $(newForm).find("input[data-action=update]").on('change', updateSlug);
+          $(newForm).find("input[data-action=update]").on('focus', updateSlug);
         }
     });
 
@@ -43,16 +67,19 @@ script(type='text/javascript').
 
       div.panel-body
         div.row
-          div.col-md-3.col-xs-8
+          div.col-md-2.col-xs-6
             div.form-group
-              input.form-control(type='text', id='properties_#index#_name', name='properties[#index#][name]', placeholder="Name", required)
-          div.col-md-2.col-xs-4
+              input.form-control(type='text' data-action='update', data-update='urn', id='properties_#index#_name', name='properties[#index#][name]', placeholder="Name", required)
+          div.col-md-2.col-xs-6
             div.form-group
-              select.form-control(id='properties_#index#_name', name='properties[#index#][type]')
+              input.form-control(type='text', id='properties_#index#_urn', name='properties[#index#][urn]', placeholder="URN", pattern="[a-z0-9-]+", title="a-z, 0-9, or hyphens (-)", required)
+          div.col-md-2.col-xs-12
+            div.form-group
+              select.form-control(id='properties_#index#_type', name='properties[#index#][type]')
                 option(value="", disabled, selected) Select type
                 each val in PropertyTypes
                   option(value=val.id)= val.name
-          div.col-md-4.col-xs-6
+          div.col-md-3.col-xs-6
             div.input-group
               span.input-group-addon
                 input(type='checkbox', id='properties_#index#_computed', name='properties[#index#][computed]', value="true")
@@ -61,10 +88,14 @@ script(type='text/javascript').
             div.form-group
               input.form-control(type='text', id='properties_#index#_default', name='properties[#index#][default]', placeholder="Default Value")
   #properties_controls.form-group
-    div.btn-group(role="group")
-      button.btn.btn-default(id="properties_add")
-        span.glyphicon.glyphicon-plus
-        |  Add Property
-      button.btn.btn-default(id="properties_remove_last")
-        span.glyphicon.glyphicon-remove
-        |  Remove Last
+    div
+      #properties_add
+        button.btn.btn-default
+          span.glyphicon.glyphicon-plus
+          |  Add Property
+      #properties_add_n
+        .input-group-btn
+          button.btn.btn-default(id="properties_add_n_input")
+            span.glyphicon.glyphicon-plus
+            |  Add
+        input.form-control(type='text', id='properties_add_n_input', placeholder="# Properties")

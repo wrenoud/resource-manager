@@ -8,13 +8,13 @@ block head
 block headline
   +breadcrumbs(Resource.cache,
     {
-      'name': ResourceDefinition.display,
-      'path': appPath(ResourceDefinition.name)
+      'name': ResourceDefinition.name,
+      'path': appPath(ResourceDefinition.urn)
     })
 
   h1!= Resource.cache
     |  
-    +button_edit( appPath(ResourceDefinition.name, Resource.id) )
+    +button_edit( appPath(ResourceDefinition.urn, Resource.id) )
 
 block content
   table.table

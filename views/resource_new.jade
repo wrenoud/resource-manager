@@ -7,11 +7,11 @@ block head
 block headline
   +breadcrumbs("New",
     {
-      'name': ResourceDefinition.display,
-      'path': appPath(ResourceDefinition.name)
+      'name': ResourceDefinition.name,
+      'path': appPath(ResourceDefinition.urn)
     })
 
-  h1 New #{ResourceDefinition.display} Definition
+  h1 New #{ResourceDefinition.name} Definition
   
 block content
   div
@@ -20,14 +20,14 @@ block content
         each property in ResourceDefinition.PropertyDefinitions
           div.form-group
             em.col-sm-2.control-label (#{property.PropertyType.name})
-            label.col-sm-2.control-label(for=property.name)= property.name 
+            label.col-sm-2.control-label(for=property.urn)= property.name 
             div.col-sm-8
               if property.computed
                 input.form-control(type="text", disabled="disabled", value=property.equation)
               else
                 input.form-control(
                   type="text",
-                  name=property.name,
+                  name=property.urn,
                   placeholder=property.default,
                   pattern=property.PropertyType.pattern,
                   title=property.PropertyType.name)

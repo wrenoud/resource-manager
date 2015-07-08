@@ -7,14 +7,14 @@ block head
 block headline
   +breadcrumbs("Edit",
     {
-      'name': ResourceDefinition.display,
-      'path': appPath(ResourceDefinition.name)
+      'name': ResourceDefinition.name,
+      'path': appPath(ResourceDefinition.urn)
     },{
       'name': Resource.cache,
-      'path': appPath(ResourceDefinition.name, Resource.id)
+      'path': appPath(ResourceDefinition.urn, Resource.id)
     })
 
-  h1 Edit #{ResourceDefinition.display} Item
+  h1 Edit #{ResourceDefinition.name} Item
   
 block content
   div
@@ -23,15 +23,15 @@ block content
         each property in Resource.properties
           div.form-group
             em.col-sm-2.control-label (#{PropertyDefinitions[property.definition].PropertyType.name})
-            label.col-sm-2.control-label(for=property.name)= property.name 
+            label.col-sm-2.control-label(for=property.urn)= property.name 
             div.col-sm-8
               if PropertyDefinitions[property.definition].computed
                 input.form-control(type="text", disabled="disabled", value=PropertyDefinitions[property.definition].equation)
               else
                 input.form-control(
                   type="text",
-                  id=property.name,
-                  name=property.name,
+                  id=property.urn,
+                  name=property.urn,
                   value=property.value,
                   pattern=PropertyDefinitions[property.definition].PropertyType.pattern,
                   title=PropertyDefinitions[property.definition].PropertyType.name)

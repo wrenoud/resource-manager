@@ -5,6 +5,7 @@ module.exports = function(sequelize, DataTypes) {
       primaryKey: true,
       defaultValue: DataTypes.UUIDV1
     },
+    urn: DataTypes.STRING,
     name: DataTypes.STRING,
     computed: DataTypes.BOOLEAN,
     equation: DataTypes.TEXT,

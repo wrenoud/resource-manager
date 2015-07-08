@@ -5,62 +5,6 @@ var Promise = require('bluebird');
 var Handlebars = require('handlebars');
 var math = require('mathjs');
 
-var types = require('./types');
-
-router.use('/types', types);
-
-router.route('/')
-  .get(function(req, res, next) {
-    req.models.ResourceDefinition.findAll()
-      .then(function(defs){
-        res.render('resource_definition_list', { 'ResourceDefinitions': defs });
-      });
-  });
-
-router.route('/new')
-  .get(function(req, res, next){
-    req.models.PropertyType.findAll()
-      .then(function(types){
-        console.log("Here");
-        res.render('resource_definition_new', { "PropertyTypes": types });
-      });
-  })
-  .post(function(req, res, next) {
-    // create resource
-    var definition = {
-      'name': req.body.name,
-      'display': req.body.display,
-      'description': req.body.description,
-      'view': req.body.view
-    }
-    req.models.ResourceDefinition.create(definition)
-      .then(function(def){
-        definition = def;
-        var properties = req.body.properties;
-        for(key in properties)
-        {
-          properties[key]['definition'] = def.id
-        }
-        // create properties with relationship
-        return req.models.PropertyDefinition.bulkCreate(properties);
-      }).then(function(){
-        res.redirect('./' + definition.name + '/');
-      });
-  });
-
-var loadDefinition = function(req, res, next){
-  req.models.ResourceDefinition.findOne({
-    'where': {'name': req.params.name},
-    'include':[{
-      'model': req.models.PropertyDefinition,
-      'include':[req.models.PropertyType]
-    }]
-  }).then(function(def){
-      res.locals.ResourceDefinition = def;
-      next();
-    });
-};
-
 var loadResource = function(req, res, next){
   req.models.Resource.findOne({'where': {'id': req.params.id}, 'include':[req.models.Property]})
     .then(function(def){
@@ -68,43 +12,6 @@ var loadResource = function(req, res, next){
       next();
     });
 };
-
-router.route('/:name/edit')
-  .all(loadDefinition)
-  .get(function(req, res, next){
-    res.render('resource_definition_edit');
-  })
-  .post(function(req, res, next){
-    var definition = {
-      'name': req.body.name,
-      'display': req.body.display,
-      'description': req.body.description,
-      'view': req.body.view
-    }
-    res.locals.ResourceDefinition.updateAttributes(definition)
-      .then(function(){
-        res.redirect('./');
-      });
-  });
-
-router.route('/:name/delete')
-  .all(loadDefinition)
-  .delete(function(req, res, next){
-    var definition = res.locals.ResourceDefinition;
-    console.log(definition.PropertyDefinitions);
-
-    Promise.map(definition.PropertyDefinitions, function(property_def){
-      return req.models.Property.destroy({'where': {'definition': property_def.id}})
-    }).then(function(destroyed){
-      return req.models.PropertyDefinition.destroy({'where': {'definition': definition.id}});
-    }).then(function(destroyed){
-      return req.models.Resource.destroy({'where': {'definition': definition.id}});
-    }).then(function(destroyed){
-      return req.models.ResourceDefinition.destroy({'where': {'id': definition.id}});
-    }).then(function(destroyed){
-      res.json({'success': true, 'result': {'id':  definition.id}});
-    });
-  });
 
 // Resource Routes
 var getMappedProperties = function(definition){
@@ -130,8 +37,9 @@ var computeResource = function(property_map, resource){
     if(property.definition in property_map)
     {
       var property_def = property_map[property.definition];
-      values.properties[property_def.name] = {
+      values.properties[property_def.urn] = {
         'id': property.id,
+        'urn': property_def.urn,
         'name': property_def.name,
         'value': property.value,
         'definition': property.definition,
@@ -145,8 +53,7 @@ var computeResource = function(property_map, resource){
   return values;
 }
 
-router.route("/:name/")
-  .all(loadDefinition)
+router.route("/")
   .get(function(req, res, next) {
     var definition = res.locals.ResourceDefinition;
     definition.getResources({'include':[req.models.Property]})
@@ -164,8 +71,7 @@ router.route("/:name/")
       });
   });
 
-router.route('/:name/new')
-  .all(loadDefinition)
+router.route('/new')
   .get(function(req, res, next){
     res.render('resource_new');
   })
@@ -182,12 +88,12 @@ router.route('/:name/new')
         for(key in property_defs){
           var property_def = property_defs[key];
           if(!property_def.computed){
-            if(property_def.name in req.body && req.body[property_def.name] !== ""){
+            if(property_def.urn in req.body && req.body[property_def.urn] !== ""){
               // TODO validation
-              named_properties[property_def.name] = req.body[property_def.name];
+              named_properties[property_def.urn] = req.body[property_def.urn];
             }else{
               // use default if not set
-              named_properties[property_def.name] = property_def.default;
+              named_properties[property_def.urn] = property_def.default;
             }
           }
         }
@@ -197,7 +103,7 @@ router.route('/:name/new')
           return new Promise(function (resolve, reject) {  
             var property = {'definition': property_def.id, 'resource': resource.id};
             if(!property_def.computed){
-              property.value = named_properties[property_def.name];
+              property.value = named_properties[property_def.urn];
 
               var template = Handlebars.compile(property_def.PropertyType.view);
               property.cache = template({'value': property.value});
@@ -225,7 +131,7 @@ router.route('/:name/new')
         var namedProperties = {};
         for(key in properties){
           property = property_map[properties[key].definition];
-          namedProperties[property.name] = properties[key].value;
+          namedProperties[property.urn] = properties[key].value;
         }
 
         var definitionTemplate = Handlebars.compile(definition.view);
@@ -239,8 +145,8 @@ router.route('/:name/new')
       });
   });
 
-router.route('/:name/:id/')
-  .all(loadDefinition, loadResource)
+router.route('/:id/')
+  .all(loadResource)
   .get(function(req, res, next){
     var definition = res.locals.ResourceDefinition;
     var resource = res.locals.Resource;
@@ -251,8 +157,8 @@ router.route('/:name/:id/')
     res.render('resource_item', { 'Resource': values });
   })
 
-router.route('/:name/:id/edit')
-  .all(loadDefinition, loadResource)
+router.route('/:id/edit')
+  .all(loadResource)
   .get(function(req, res, next){
     var definition = res.locals.ResourceDefinition;
     var resource = res.locals.Resource;
@@ -277,12 +183,12 @@ router.route('/:name/:id/edit')
     for(key in property_defs){
       var property_def = property_defs[key];
       if(!property_def.computed){
-        if(property_def.name in req.body){
+        if(property_def.urn in req.body){
           // TODO validation
-          named_properties[property_def.name] = req.body[property_def.name];
+          named_properties[property_def.urn] = req.body[property_def.urn];
         }else{
           // use existing if not set
-          named_properties[property_def.name] = property_map[property_def.id].value;
+          named_properties[property_def.urn] = property_map[property_def.id].value;
         }
       }
     }
@@ -292,7 +198,7 @@ router.route('/:name/:id/edit')
       return new Promise(function (resolve, reject) {  
         var property = {'definition': property_def.id, 'resource': resource.id};
         if(!property_def.computed){
-          property.value = named_properties[property_def.name];
+          property.value = named_properties[property_def.urn];
           resolve(property);
         }else{
           try{
@@ -313,7 +219,7 @@ router.route('/:name/:id/edit')
         for(key in properties){
           var property = properties[key];
           var property_def = property_def_map[property.definition];
-          namedProperties[property_def.name] = property.value;
+          namedProperties[property_def.urn] = property.value;
 
           // recompute property cache if value changed
           if(property_map[property.definition].value !== property.value){
@@ -342,8 +248,7 @@ router.route('/:name/:id/edit')
     });
   });
 
-router.route('/:name/:id/delete')
-  .all(loadDefinition)
+router.route('/:id/delete')
   .delete(function(req, res, next){
     req.models.Property.destroy({'where': {'resource': req.params.id}})
       .then(function(destroyed){

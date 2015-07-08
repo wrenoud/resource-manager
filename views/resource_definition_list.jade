@@ -30,11 +30,11 @@ block content
     ul.list-group
       each definition in ResourceDefinitions
         li.list-group-item.clickable(id="definition_#{definition.id}")
-          a(href=appPath( definition.name ))= definition.display
+          a(href=appPath( definition.urn ))= definition.name
           div.pull-right
-            +button_edit_small( appPath(definition.name) )
+            +button_edit_small( appPath(definition.urn) )
             |  
-            +modal_delete_button_small( definition.name, definition.display )
+            +modal_delete_button_small( definition.urn, definition.name )
 
   else
     p
