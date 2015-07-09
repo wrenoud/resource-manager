@@ -3,6 +3,10 @@ var router = express.Router();
 
 var Promise = require('bluebird');
 
+router.route("/about").get(function(req, res){
+  res.render('construction');
+});
+
 router.route('/')
   .get(function(req, res, next) {
     req.models.ResourceDefinition.findAll()

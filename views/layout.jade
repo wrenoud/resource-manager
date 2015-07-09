@@ -23,9 +23,9 @@ html
         };
         xmlhttp.open("GET","/reload",true);
         xmlhttp.send();
-        setTimeout(checkReload, 2000);
+        setTimeout(checkReload, 5000);
       }
-      setTimeout(checkReload, 2000);
+      setTimeout(checkReload, 5000);
 
     block head
 
@@ -40,6 +40,13 @@ html
             span.icon-bar
           a.navbar-brand(href='/') Resource Manager
         #navbar.navbar-collapse.collapse
+          if !user
+            form.navbar-form.navbar-right(role='search', method="post", action="/login")
+              .form-group
+                input.form-control(type='text', name='username', placeholder='Username')
+              .form-group
+                 input.form-control(type='password', name='password', placeholder='Password')
+              button.btn.btn-default(type='submit') Sign In
           ul.nav.navbar-nav.navbar-right
             li
               a(href=appPath()) Resources
@@ -62,7 +69,16 @@ html
                   a(href="http://192.168.0.17/phpmyadmin", target="_blank")
                     img(src="http://192.168.0.17/phpmyadmin/favicon.ico", width="32px", height="32px")
                     |  phpMyAdmin
-   
+            if user
+              li.dropdown
+                a.dropdown-toggle(data-toggle="dropdown" role="button")= user.displayName
+                  |  
+                  img(src=user.avatarUrls['24x24'])
+                  span.caret
+                ul.dropdown-menu
+                  li
+                    a(href="/logout") Logout
+             
     div.container
       block headline
     
