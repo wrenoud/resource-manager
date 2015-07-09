@@ -70,6 +70,17 @@ script(type='text/javascript').
 
   });
 
+.form-horizontal
+  div.form-group
+    div.col-md-2.col-xs-12
+      label.control-label Anonymous
+      input.form-control(type='hidden', id='permissions_#index#_type', name='permissions[][type]', value="anon")
+    div.col-md-2.col-xs-12
+      select.form-control(id='permissions_#index#_permission', name='permissions[][permission]')
+        option(value="") None
+        option(value="read") Read
+        option(value="write") Read/Write
+
 #permissions
   #permissions_noforms_template
     p No Permissions
@@ -78,7 +89,6 @@ script(type='text/javascript').
       div.col-md-2.col-xs-12
         div.form-group
           select.form-control.permission-type(id='permissions_#index#_type', name='permissions[#index#][type]')
-            option(value="anon") Anonymous
             option(value="user") User
             option(value="group") Group
       div.col-md-2.col-xs-12
