@@ -10,7 +10,10 @@ html
     link(rel='stylesheet', href='/components/bootstrap-css/css/bootstrap.min.css')
     link(rel='stylesheet', href='/components/bootstrap-css/css/bootstrap-theme.min.css')
     link(rel='stylesheet', href='/stylesheets/style.css')
-    script(src="/javascripts/jquery-1.11.3.js")
+    script(src="/components/jquery/dist/jquery.min.js")
+    script(src="/components/jquery-ui/jquery-ui.min.js")
+    //script(src="/javascripts/jquery-1.11.3.js")
+    script(src='/javascripts/jquery.sheepItPlugin-1.1.1.js')
 
     script(type='text/javascript').
       var runid = '#{runid}';
@@ -71,9 +74,10 @@ html
                     |  phpMyAdmin
             if user
               li.dropdown
-                a.dropdown-toggle(data-toggle="dropdown" role="button")= user.displayName
-                  |  
+                a.dropdown-toggle(data-toggle="dropdown" role="button")
                   img(src=user.avatarUrls['24x24'])
+                  |  
+                  = user.displayName
                   span.caret
                 ul.dropdown-menu
                   li

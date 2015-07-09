@@ -7,10 +7,6 @@ var express = require('express')
 
 var uuid = require('node-uuid');
 
-// routes
-var index = require('./routes/index');
-var resources = require('./routes/resource_definition');
-
 // start app
 var app = express();
 
@@ -25,7 +21,6 @@ if(false){
     ]);
   });  
 }
-
 
 
 // view engine setup
@@ -72,8 +67,10 @@ app.locals.path = function(){
   return path.join.apply(null, args).replace(/\\/g,'/');
 };
 
-app.use('/', index);
-app.use(app.locals.APP_PATH, resources);
+
+app.use('/',                  require('./routes/index'));
+app.use(app.locals.APP_PATH,  require('./routes/resource_definition'));
+app.use('/jira',              require('./routes/jira_proxy'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

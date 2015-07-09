@@ -1,0 +1,101 @@
+script(src='/components/typeahead.js/dist/bloodhound.min.js')
+script(src='/components/typeahead.js/dist/typeahead.bundle.js')
+script(type='text/javascript').
+  var permission_data = !{(data && data.properties) ? JSON.stringify(data.properties) : "[]"};
+
+  var toggleIdentifier = function(){
+    var index = this.id.split("_")[1];
+
+    // clear
+    $('#permissions_'+index+'_identifier').typeahead("destroy");
+    $('#permissions_'+index+'_identifier').val("");
+
+    if($(this).val() === "group"){
+      $('#permissions_'+index+'_identifier').typeahead(null, {
+        name: 'term',
+        display: 'label',
+        source: groups
+      });
+    }
+    if($(this).val() === "user"){
+      $('#permissions_'+index+'_identifier').typeahead(null, {
+        name: 'term',
+        display: 'label',
+        source: users
+      });
+    }
+  }
+
+  var groups = new Bloodhound({
+    datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+    queryTokenizer: Bloodhound.tokenizers.whitespace,
+    remote: {
+      url: '/jira/groups?query=%QUERY',
+      wildcard: '%QUERY'
+    }
+  });
+  
+  var users = new Bloodhound({
+    datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+    queryTokenizer: Bloodhound.tokenizers.whitespace,
+    remote: {
+      url: '/jira/users?query=%QUERY',
+      wildcard: '%QUERY'
+    }
+  });
+
+  $(document).ready(function() {
+    console.log('initionalizing');
+    var permissions = $('#permissions').sheepIt({
+        separator: '',
+        allowRemoveLast: false,
+        allowRemoveCurrent: true,
+        allowRemoveAll: false,
+        allowAdd: true,
+        allowAddN: false,
+        //maxFormsCount: 10,
+        minFormsCount: 1,
+        iniFormsCount: 1,
+        data: [{
+          type: 'group',
+          permission: 'write',
+          identifier: 'qps-staff'
+        }],
+        afterAdd: function(source, newForm) {
+          console.log('initionalizing item');
+          console.log($(newForm).find(".permission-type"));
+          $(newForm).find(".permission-type").on('change',toggleIdentifier);
+        }
+    });
+
+  });
+
+#permissions
+  #permissions_noforms_template
+    p No Permissions
+  #permissions_template
+    div.row
+      div.col-md-2.col-xs-12
+        div.form-group
+          select.form-control.permission-type(id='permissions_#index#_type', name='permissions[#index#][type]')
+            option(value="anon") Anonymous
+            option(value="user") User
+            option(value="group") Group
+      div.col-md-2.col-xs-12
+        div.form-group
+          select.form-control(id='permissions_#index#_permission', name='permissions[#index#][permission]')
+            option(value="read") Read
+            option(value="write") Read/Write
+      div.col-md-2.col-xs-6
+        div.form-group
+          input.form-control.typeahead(type='text', id='permissions_#index#_identifier', name='permissions[#index#][identifier]', placeholder="Identifier")
+      div.col-md-1.col-xs-1
+        div.form-group
+          button.btn.btn-default(id="permissions_remove_current")
+            span.glyphicon.glyphicon-remove
+  #permissions_controls
+    div
+      #permissions_add.form-group
+        button.btn.btn-default
+          span.glyphicon.glyphicon-plus
+          |  Add Permission
