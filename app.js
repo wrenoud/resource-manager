@@ -14,7 +14,7 @@ var app = express();
 var models = require('./models');
 
 // load plugins
-var pluginsInterface = require('./lib/plugin_interface')(app, models);
+var pluginsInterface = app.interface = require('./lib/plugin_interface')(app, models);
 require('./lib/plugins/base_types')(pluginsInterface);
 require('./lib/plugins/jira_integration')(pluginsInterface);
 

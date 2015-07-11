@@ -44,7 +44,7 @@ html
           a.navbar-brand(href='/') Resource Manager
         #navbar.navbar-collapse.collapse
           if !user
-            form.navbar-form.navbar-right(role='search', method="post", action="/login")
+            form.navbar-form.navbar-right(role='search', method="post", action="/login/jira")
               .form-group
                 input.form-control(type='text', name='username', placeholder='Username')
               .form-group

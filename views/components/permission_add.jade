@@ -30,7 +30,7 @@ script(type='text/javascript').
     datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
     queryTokenizer: Bloodhound.tokenizers.whitespace,
     remote: {
-      url: '/jira/groups?query=%QUERY',
+      url: '/plugin/jira/groups?query=%QUERY',
       wildcard: '%QUERY'
     }
   });
@@ -39,7 +39,7 @@ script(type='text/javascript').
     datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
     queryTokenizer: Bloodhound.tokenizers.whitespace,
     remote: {
-      url: '/jira/users?query=%QUERY',
+      url: '/plugin/jira/users?query=%QUERY',
       wildcard: '%QUERY'
     }
   });
