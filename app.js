@@ -12,16 +12,13 @@ var app = express();
 
 // load models
 var models = require('./models');
-if(false){
-  models.sequelize.sync({ force: true }).then(function(){
-    models.PropertyType.bulkCreate([
-      {'name':'Number', 'pattern': '[-+]?[0-9]*[.,]?[0-9]+', 'view':'{{value}}'},
-      {'name':'Text',   'pattern': '.*', 'view':'{{value}}'},
-      {'name':'URL',    'pattern': 'https?://([a-zA-Z\d]+\.)+[a-zA-Z\d]{2,6}(/[/\w \.-]*)*', 'view':'<a target="_blank" href="{{value}}">{{value}}</a>'}
-    ]);
-  });  
-}
 
+// load plugins
+var pluginsInterface = require('./lib/plugin_interface')(app, models);
+require('./lib/plugins/base_types')(pluginsInterface);
+require('./lib/plugins/jira_integration')(pluginsInterface);
+
+pluginsInterface.initializeTypes();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -40,6 +37,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// make models accessable to routes
 app.use(function(req,res,next){
   req.models = models;
   next();
@@ -51,11 +49,9 @@ app.get('/reload', function(req,res){
 });
 
 // configure authentication
-var passport = require('./lib/authentication')(app);
-
+pluginsInterface.initializeAuthentications();
 
 // routes
-
 app.locals.APP_PATH = '/resources';
 app.locals.appPath = function(){
   var args = Array.prototype.slice.call(arguments).map(String);
@@ -67,10 +63,9 @@ app.locals.path = function(){
   return path.join.apply(null, args).replace(/\\/g,'/');
 };
 
-
 app.use('/',                  require('./routes/index'));
 app.use(app.locals.APP_PATH,  require('./routes/resource_definition'));
-app.use('/jira',              require('./routes/jira_proxy'));
+pluginsInterface.initializeAPIs();
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
